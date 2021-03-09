@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1615315030 source:c:\users\acer\desktop\lam\gamesdl\main.cpp
+	<SDL.h>
+	<SDL_ttf.h>
+	<bits/stdc++.h>
+
