@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1615860116 source:c:\users\acer\desktop\lam\gamesdl\main.cpp
+1617237560 source:c:\users\acer\desktop\lam\gamesdl\main.cpp
 	<SDL.h>
 	<SDL_ttf.h>
 	<bits/stdc++.h>
