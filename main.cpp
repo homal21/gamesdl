@@ -15,7 +15,7 @@ double k=0;
 void init()
 {
    TTF_Init();
-    window = SDL_CreateWindow( "Ditmecuocdoi", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow( "ditmecuocdoi", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
 }
 void render_map(SDL_Texture *texture,SDL_Rect rect)
@@ -149,9 +149,10 @@ int main(int argc, char* argv[])
     }
     if (collison==true)
     {
-        posobj.y+=5;
+        posobj.y+=1;
+        is_flying=true;
     }
-    if (posobj.y>=600) break;
+    if (posobj.y>=700) SDL_Delay(10000);
     SDL_RenderPresent(renderer);
     if (collison==false) k+=dem;
     if (k>=SCREEN_WIDTH*2)
