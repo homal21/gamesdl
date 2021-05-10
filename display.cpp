@@ -2,8 +2,8 @@
 #include"display.h"
 #include <SDL_ttf.h>
 #include <SDL.h>
-using namespace std;
 
+using namespace std;
 void render_image(SDL_Texture *texture,SDL_Rect rect)
 {
     SDL_RenderCopy( renderer, texture, NULL, &rect );
