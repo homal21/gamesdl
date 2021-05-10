@@ -1,21 +1,20 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <bits/stdc++.h>
-
+#include "display.h"
 using namespace std;
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1200;
+const int SCREEN_HEIGHT= 600;
 SDL_Window* window = NULL;
-SDL_Surface* gScreenSurface = NULL;
 SDL_Renderer* renderer = NULL;
-SDL_Surface* g_Object = NULL;
-SDL_Texture *map_texture,*dino1_texture,*dino2_texture,*dino3_texture,*dino4_texture,*dino5_texture,*dino6_texture,*vatcan1_texture,*vatcan2_texture;
-SDL_Event* event ;
+SDL_Texture* score_texture[10000], *note, *score_text_texture, *highscore_text_texture;
+SDL_Texture* vatcan_texture[5];
+SDL_Texture *map_texture,*dino1_texture,*dino2_texture,*dino3_texture,*dino4_texture,*dino5_texture,*dino6_texture,*menu_texture,*button_texture;
 double k=0;
 void init()
 {
    TTF_Init();
-    window = SDL_CreateWindow( "ditmecuocdoi", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    window = SDL_CreateWindow( "Dino In Sahara", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
     renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
 }
 void render_map(SDL_Texture *texture,SDL_Rect rect)
@@ -24,85 +23,109 @@ void render_map(SDL_Texture *texture,SDL_Rect rect)
     ScrR = {k,0,SCREEN_WIDTH,SCREEN_HEIGHT};
     SDL_RenderCopy( renderer, texture, &ScrR, &rect );
 }
-void render_image(SDL_Texture *texture,SDL_Rect rect)
+int show_menu()
 {
-    SDL_RenderCopy( renderer, texture, NULL, &rect );
-}
-void render_text(SDL_Renderer *renderer,string path,SDL_Rect rect,int font_size)
-{
-    TTF_Font *font = TTF_OpenFont("font.ttf",font_size);
-    TTF_SizeText(font,path.c_str(),&rect.w,&rect.h);
-    SDL_Color color = {0, 125, 125, 0};
-    SDL_Surface *message=TTF_RenderText_Solid(font, path.c_str(), color);
-    message->w=rect.w;message->h=rect.h;
-    SDL_Texture* texture=SDL_CreateTextureFromSurface( renderer, message);
-    SDL_RenderCopy( renderer, texture, NULL, &rect );
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(message);
-}
-void setup_texture()
-{
-    SDL_Surface *surface;
-    surface=SDL_LoadBMP("image/dino1.bmp");
-    dino1_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/dino2.bmp");
-    dino2_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/dino3.bmp");
-    dino3_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/dino4.bmp");
-    dino4_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/dino5.bmp");
-    dino5_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/dino6.bmp");
-    dino6_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/vatcan1.bmp");
-    vatcan1_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/vatcan2.bmp");
-    vatcan2_texture=SDL_CreateTextureFromSurface(renderer,surface);
-    surface=SDL_LoadBMP("image/map.bmp");
-    map_texture=SDL_CreateTextureFromSurface(renderer,surface);
+    SDL_Rect menu_background = {0,0,1200,600};
+    SDL_Rect play_button_Dest = {500,250,120,60};
+    SDL_Rect play_button_Scr = {0,0,120,60};
+    SDL_Rect play_button_bright_Scr = {0,60,120,60};
+    SDL_Rect exit_button_Dest = {500,450,120,60};
+    SDL_Rect exit_button_Scr = {240,0,120,60};
+    SDL_Rect exit_button_bright_Scr = {240,60,120,60};
+    SDL_RenderCopy(renderer,menu_texture,NULL,&menu_background);
+    SDL_RenderCopy(renderer,button_texture,&play_button_Scr,&play_button_Dest);
+    SDL_RenderCopy(renderer,button_texture,&exit_button_Scr,&exit_button_Dest);
+    int x,y;
+    bool selected[2]={0,0};
+    SDL_Rect pos_menu[2];
+    pos_menu[0] = play_button_Dest;
+    pos_menu[1] = exit_button_Dest;
+    SDL_Event event;
+    while(1)
+    while(SDL_PollEvent(&event))
+    {
+     if (event.type == SDL_MOUSEMOTION)
+     {
+        x = event.motion.x;
+        y = event.motion.y;
+            if (check_click(pos_menu[0],x,y))
+            {
+                if (selected[0]==0)
+                {
+                    selected[0] = 1;
+                    SDL_RenderCopy(renderer,button_texture,&play_button_bright_Scr,&play_button_Dest);
+                }
+            }
+            else
+            {
+                if (selected[0]==1)
+                {
+                    selected[0] = 0;
+                    SDL_RenderCopy(renderer,button_texture,&play_button_Scr,&play_button_Dest);
+                }
 
-}
-bool check_collison(SDL_Rect &posobj, SDL_Rect &barrier)
-{
-  int x1_obj=posobj.x;
-  int x4_obj=posobj.x+posobj.w;
-  int y1_obj=posobj.y;
-  int y4_obj=posobj.y+posobj.h;
+            }
+            if (check_click(pos_menu[1],x,y))
+            {
+                if (selected[1]==0)
+                {
+                    selected[1] = 1;
+                    SDL_RenderCopy(renderer,button_texture,&exit_button_bright_Scr,&exit_button_Dest);
+                }
+            }
+            else
+            {
+                if(selected[1])
+                {
+                    selected[1] = 0;
+                    SDL_RenderCopy(renderer,button_texture,&exit_button_Scr,&exit_button_Dest);
+                }
 
-  int x1_barrier=barrier.x;
-  int x4_barrier=barrier.x+barrier.w;
-  int y1_barrier=barrier.y;
-  int y4_barrier=barrier.y+barrier.h;
-  if (x4_obj>=x1_barrier && x4_obj<=x4_barrier)
-    if (y4_obj>=y1_barrier && y4_obj<=y4_barrier)
-     return true;
-  if (x1_obj>x1_barrier && x1_obj<x4_barrier)
-    if (y4_obj>y1_barrier && y4_obj<y4_barrier)
-    return true;
-  return false;
+            }
+        }
+        x = event.button.x;
+        y = event.button.y;
+        for (int i = 0; i <2; i++)
+         if (check_click(pos_menu[i],x,y))
+          if (event.type == SDL_MOUSEBUTTONDOWN) return i;
+        SDL_RenderPresent(renderer);
+    }
 }
 
-int main(int argc, char* argv[])
+void game_play()
 {
-    init();
-    setup_texture();
     SDL_Event  event;
-    bool quit=false;
     SDL_Rect posobj={100,420,40,50};
+    SDL_Rect pos_note={200,100,40,50};
+    SDL_Rect pos_score={1150,0,40,50};
+    SDL_Rect pos_highscore={1150,60,40,50};
+    SDL_Rect pos_score_text={1000,0,80,50};
+    SDL_Rect pos_highscore_text={1000,60,120,50};
+    TTF_Font *font = TTF_OpenFont("font.ttf", 75);
+    string s="ban da thua, an SPACE de choi lai, an ESC de thoat";
+    TTF_SizeText(font,s.c_str(), &pos_note.w,&pos_note.h);
+    SDL_Color color = {0, 0, 0, 0};
+    SDL_Surface* message = TTF_RenderText_Solid(font, s.c_str(), color);
+    note = SDL_CreateTextureFromSurface( renderer, message);
+    SDL_FreeSurface(message);
     int y_obj_max=250;
     int y_obj_min=420;
     bool check_move;
     bool is_flying;
     bool collison=false;
-    double dem=1;
+    double speed=1;
     int cong=0;
+    int diem=0;
+    int random=rand()% 2;
+    int highscore=0;
+    int kc_random=rand()%(450 -150+ 1)+150;
     while(k<SCREEN_WIDTH*2)
     {
     SDL_Rect r={0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
     SDL_RenderClear(renderer);
     render_map(map_texture,r);
-    SDL_Rect barrier={1024-k,400,60,75};
+    SDL_Rect barrier1={1200-k,400,50,75};
+    SDL_Rect barrier2={2400-kc_random-k,400,50,75};
     cong++;
      if (collison==false)
      {
@@ -111,7 +134,7 @@ int main(int argc, char* argv[])
         if (event.type == SDL_KEYUP)
          switch( event.key.keysym.sym )
       {
-         case SDLK_UP:
+         case SDLK_SPACE:
              check_move=true;
              is_flying=true;
              break;
@@ -120,7 +143,7 @@ int main(int argc, char* argv[])
         if(check_move) posobj.y-=1;
       if (posobj.y==y_obj_max) check_move= false;
       if (is_flying)
-       if (check_move==false) posobj.y+=1;
+       if (check_move==false) posobj.y+=2;
       if (posobj.y==y_obj_min)
       {
           check_move=true;
@@ -137,13 +160,13 @@ int main(int argc, char* argv[])
          if (cong%6==4) render_image(dino5_texture,posobj);
          if (cong%6==5) render_image(dino6_texture,posobj);
      }
-    if(k<1024) render_image(vatcan1_texture,barrier);
-    else
-    {
-        barrier={2048-k,400,60,75};
-        render_image(vatcan2_texture,barrier);
-    }
-    if (check_collison(posobj,barrier))
+        if (k<1200) render_image(vatcan_texture[random],barrier1);
+        render_image(vatcan_texture[random],barrier2);
+        render_score(score_text_texture,pos_score_text);
+        render_score(highscore_text_texture,pos_highscore_text);
+        render_score(score_texture[diem/10],pos_score);
+        render_score(score_texture[highscore],pos_highscore);
+    if (check_collison(posobj,barrier1)||check_collison(posobj,barrier2))
     {
         collison=true;
     }
@@ -151,15 +174,54 @@ int main(int argc, char* argv[])
     {
         posobj.y+=1;
         is_flying=true;
+        render_score(note,pos_note);
     }
-    if (posobj.y>=700) SDL_Delay(10000);
+    while (posobj.y>=700)
+    {
+        while (SDL_PollEvent( &event) != 0)
+        if (event.type == SDL_KEYUP)
+        switch( event.key.keysym.sym )
+        {
+        case SDLK_ESCAPE:
+             exit(0);
+        case SDLK_SPACE:
+            k=0;
+            speed=1;
+            diem=0;
+            collison=false;
+            is_flying=false;
+            posobj={100,420,40,50};
+        }
+    }
     SDL_RenderPresent(renderer);
-    if (collison==false) k+=dem;
+    if (collison==false)
+    {
+        k+=speed;
+        diem++;
+        if (diem/10 > highscore ) highscore=diem/10;
+    }
     if (k>=SCREEN_WIDTH*2)
     {
         k=0;
-        dem+=0.05;
+        if (speed>=2.8) speed+=0.01;
+            else
+             speed+=0.2;
+        kc_random=rand()%(450 -150+ 1)+150 ;
+        random=rand()%2;
+
     }
     SDL_Delay(2);
     }
+}
+int main(int argc, char* argv[])
+{
+    init();
+    setup_score_text();
+    setup_texture();
+    int showmenu = show_menu();
+    if (showmenu==0) game_play();
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    TTF_Quit();
+    SDL_Quit();
 }
