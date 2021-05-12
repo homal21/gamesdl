@@ -42,7 +42,6 @@ int show_menu()
     while(1)
     while(SDL_PollEvent(&event))
     {
-     if (!Mix_PlayingMusic()) Mix_PlayMusic(music, 0);
      if (event.type == SDL_MOUSEMOTION)
      {
         x = event.motion.x;
@@ -99,6 +98,7 @@ int main(int argc, char* argv[])
     Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
     chunk= Mix_LoadWAV("music/effect.wav");
     music= Mix_LoadMUS("music/music.wav");
+    if (!Mix_PlayingMusic()) Mix_PlayMusic(music, -1);
     int showmenu = show_menu();
     if (showmenu==0) game_play();
     SDL_DestroyWindow(window);

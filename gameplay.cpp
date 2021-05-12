@@ -3,7 +3,6 @@
 #include <SDL_ttf.h>
 #include <SDL.h>
 #include"gameplay.h"
-#include "SDL_mixer.h"
 
 extern const int SCREEN_WIDTH = 1200;
 extern const int SCREEN_HEIGHT= 600;
