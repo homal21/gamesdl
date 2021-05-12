@@ -1,5 +1,5 @@
 # Giới thiệu :
-``Game dựa trên game Dinosaur Game của Google Chrome. Game thường được dùng để giết thời gian khi mất mạng.``
+``Game dựa trên  Dinosaur Game của Google Chrome. Game thường được dùng để giết thời gian khi mất mạng.``
 ``Cách chơi : Ấn phím SPACE để nhảy , né khỏi vật cản ``
 
 # Tính năng 
