@@ -1,15 +1,16 @@
 # depslib dependency file v1.0
-1620649769 source:c:\users\acer\desktop\lam\gamesdl\main.cpp
+1620790035 source:c:\users\acer\desktop\lam\gamesdl\main.cpp
 	<SDL.h>
 	<SDL_ttf.h>
 	<bits/stdc++.h>
+	<SDL_mixer.h>
 	"display.h"
 	"gameplay.h"
 
 1620649209 c:\users\acer\desktop\lam\gamesdl\display.h
 	<SDL.h>
 
-1620649209 source:c:\users\acer\desktop\lam\gamesdl\display.cpp
+1620727398 source:c:\users\acer\desktop\lam\gamesdl\display.cpp
 	<bits/stdc++.h>
 	"display.h"
 	<SDL_ttf.h>
@@ -19,10 +20,11 @@
 	<SDL.h>
 	"display.h"
 
-1620650334 source:c:\users\acer\desktop\lam\gamesdl\gameplay.cpp
+1620787341 source:c:\users\acer\desktop\lam\gamesdl\gameplay.cpp
 	<bits/stdc++.h>
 	"display.h"
 	<SDL_ttf.h>
 	<SDL.h>
 	"gameplay.h"
+	"SDL_mixer.h"
 

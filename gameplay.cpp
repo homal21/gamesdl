@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include <SDL.h>
 #include"gameplay.h"
+
 extern const int SCREEN_WIDTH = 1200;
 extern const int SCREEN_HEIGHT= 600;
 double k=0;
@@ -13,10 +14,11 @@ void render_map(SDL_Texture *texture,SDL_Rect rect)
     ScrR = {k,0,SCREEN_WIDTH,SCREEN_HEIGHT};
     SDL_RenderCopy( renderer, texture, &ScrR, &rect );
 }
+
 void game_play()
 {
     SDL_Event  event;
-    SDL_Rect posobj={100,420,40,50};
+    SDL_Rect posobj={300,420,40,50};
     SDL_Rect pos_note={200,100,40,50};
     SDL_Rect pos_score={1150,0,40,50};
     SDL_Rect pos_highscore={1150,60,40,50};
@@ -111,7 +113,7 @@ void game_play()
             diem=0;
             collison=false;
             is_flying=false;
-            posobj={100,420,40,50};
+            posobj={300,420,40,50};
         }
     }
     SDL_RenderPresent(renderer);
@@ -127,6 +129,7 @@ void game_play()
         if (speed>=2.8) speed+=0.01;
             else
              speed+=0.2;
+        if (speed>=4) speed = speed;
         kc_random=rand()%(450 -150+ 1)+150 ;
         random=rand()%2;
 

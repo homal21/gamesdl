@@ -1,11 +1,14 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <bits/stdc++.h>
+#include <SDL_mixer.h>
 #include "display.h"
 #include "gameplay.h"
 using namespace std;
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT= 600;
+Mix_Chunk *chunk = NULL;
+Mix_Music *music = NULL;
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 SDL_Texture* score_texture[10000], *note, *score_text_texture, *highscore_text_texture;
@@ -92,6 +95,10 @@ int main(int argc, char* argv[])
     init();
     setup_score_text();
     setup_texture();
+    Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
+    chunk= Mix_LoadWAV("music/effect.wav");
+    music= Mix_LoadMUS("music/music.wav");
+    if (!Mix_PlayingMusic()) Mix_PlayMusic(music, -1);
     int showmenu = show_menu();
     if (showmenu==0) game_play();
     SDL_DestroyWindow(window);
